@@ -8,10 +8,10 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<http pattern="/oauth/token.json" create-session="stateless"
+	<http pattern="/oauth/token" create-session="stateless"
 		authentication-manager-ref="clientAuthenticationManager"
 		xmlns="http://www.springframework.org/schema/security">
-		<intercept-url pattern="/oauth/token.json" access="IS_AUTHENTICATED_FULLY" />
+		<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
 		<anonymous enabled="false" />
 		<http-basic entry-point-ref="clientAuthenticationEntryPoint" />
 		<!-- include this only if you need to authenticate clients via request 
