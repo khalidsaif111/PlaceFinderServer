@@ -47,8 +47,8 @@ public class RegisterController {
 	@Autowired
 	private UserService userService;
 
-	@Resource(name = "clientAuthenticationManager")
-    protected AuthenticationManager authenticationManager;
+//	@Resource(name = "webClientAuthenticationManager")
+//    protected AuthenticationManager authenticationManager;
 
 	public UserService getUserService() {
 		return userService;
@@ -98,19 +98,19 @@ public class RegisterController {
 		return "redirect:account.html";
 	}
 	
-	private void authenticateUserAndSetSession(Registration userLoginInfo, HttpServletRequest request) {
-        String username = userLoginInfo.getNewUserEmail();
-        String password = userLoginInfo.getNewUserPassword();
-        
-        try{
-        	UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        	// generate session if one doesn't exist
-        	request.getSession();
-        	token.setDetails(new WebAuthenticationDetails(request));
-        	Authentication authenticatedUser = authenticationManager.authenticate(token);
-        	SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-        } catch(Exception exception) {
-        	exception.printStackTrace();
-        }
-    }
+//	private void authenticateUserAndSetSession(Registration userLoginInfo, HttpServletRequest request) {
+//        String username = userLoginInfo.getNewUserEmail();
+//        String password = userLoginInfo.getNewUserPassword();
+//        
+//        try{
+//        	UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+//        	// generate session if one doesn't exist
+//        	request.getSession();
+//        	token.setDetails(new WebAuthenticationDetails(request));
+//        	Authentication authenticatedUser = authenticationManager.authenticate(token);
+//        	SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+//        } catch(Exception exception) {
+//        	exception.printStackTrace();
+//        }
+//    }
 }
