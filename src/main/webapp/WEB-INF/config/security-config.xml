@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns="http://www.springframework.org/schema/security"
 	xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-		
-		<http pattern="/oauth/token.json" create-session="stateless"
+
+	<http pattern="/oauth/token.json" create-session="stateless"
 		authentication-manager-ref="clientAuthenticationManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<intercept-url pattern="/oauth/token.json" access="IS_AUTHENTICATED_FULLY" />
@@ -91,7 +89,7 @@
 			value="120" />
 		<beans:property name="clientDetailsService" ref="clientDetails" />
 	</beans:bean>
-	
+
 	<beans:bean id="userApprovalHandler"
 		class="org.springframework.security.oauth2.provider.approval.TokenServicesUserApprovalHandler">
 		<beans:property name="tokenServices" ref="tokenServices" />
@@ -131,17 +129,21 @@
 
 	<oauth:expression-handler id="oauthExpressionHandler" />
 	<oauth:web-expression-handler id="oauthWebExpressionHandler" />
-	
+
 	<authentication-manager alias="authenticationManager"
 		xmlns="http://www.springframework.org/schema/security">
 		<authentication-provider>
-			<user-service>
-				<user name="beingjavaguys" password="spring@java" authorities="ROLE_APP" />
-			</user-service>
+			<!-- <user-service> -->
+			<!-- <user name="beingjavaguys" password="spring@java" authorities="ROLE_APP" 
+				/> -->
+			<!-- </user-service> -->
+			<password-encoder hash="bcrypt" />
+			<jdbc-user-service data-source-ref="dataSource" />
 		</authentication-provider>
 	</authentication-manager>
 
-	<http auto-config="true" use-expressions="true" authentication-manager-ref="webClientAuthenticationManager">
+	<http auto-config="true" use-expressions="true"
+		authentication-manager-ref="webClientAuthenticationManager">
 		<intercept-url pattern="/register.html" access="permitAll"
 			requires-channel="https" />
 		<intercept-url pattern="/login.html" access="permitAll"
@@ -155,8 +157,7 @@
 		<intercept-url pattern="/account.html" access="hasRole('ROLE_EMPLOYEE')"
 			requires-channel="https" />
 		<form-login login-page="/login.html" username-parameter="username"
-			password-parameter="password" 
-			authentication-success-handler-ref="customAuthenticationSuccessHandler" 
+			password-parameter="password" authentication-success-handler-ref="customAuthenticationSuccessHandler"
 			authentication-failure-url="/loginFailed.html" />
 		<logout logout-success-url="/logout.html" invalidate-session="true" />
 		<access-denied-handler error-page="/403.html" />
