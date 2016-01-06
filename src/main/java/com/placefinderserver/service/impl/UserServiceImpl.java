@@ -2,12 +2,13 @@ package com.placefinderserver.service.impl;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 
-import com.placefinderserver.model.Authority;
 import com.placefinderserver.model.UserInfo;
 import com.placefinderserver.model.UserLoginInfo;
 import com.placefinderserver.service.UserService;
@@ -89,5 +90,38 @@ public class UserServiceImpl implements UserService {
 				session.close();
 			}
 		}
+	}
+	
+	public UserInfo getUserInfo(String userEmail) {
+		UserInfo userInfo = new UserInfo();
+		
+		Session session = null;
+		Transaction transaction = null;
+
+		try {
+			session = HibernateUtilities.getInstance().getSessionFactory()
+					.openSession();
+			transaction = session.beginTransaction();
+			
+			final Criteria criteria = session.createCriteria(UserInfo.class);
+
+			criteria.setMaxResults(1);
+			criteria.add(Restrictions.eq("email", userEmail));
+			List<UserInfo> userInfoList = criteria.list();
+			userInfo = userInfoList.get(0);
+			
+			transaction.commit();
+		} catch (final HibernateException e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		
+		return userInfo;
 	}
 }
